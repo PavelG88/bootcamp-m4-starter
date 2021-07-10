@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addFromDatabase, startLoad, endLoad } from '../actions/actions';
+import { getMoviesByNameFromIMDB } from '../fetch/fetchToIMDB';
 
 import './SearchBox.css';
-
-const url = 'http://www.omdbapi.com/?';
-const apiKey = '6364c4d3';
 
 class SearchBox extends Component {
     state = {
@@ -15,21 +13,22 @@ class SearchBox extends Component {
         this.setState({ searchLine: e.target.value });
     }
     searchBoxSubmitHandler = (e) => {
-        this.props.startLoadData();
+        this.props.startLoadData('Movies');
         let data = new FormData(e.target);
         let keyWords = data.get('desired-movie');
-        fetch(`${url}s=${keyWords}&apikey=${apiKey}`)
+        e.preventDefault();
+
+        getMoviesByNameFromIMDB(keyWords)
             .then (response => response.json())
             .then (data => {
-                this.props.endLoadData();
+                this.props.endLoadData('Movies');
                 this.props.addFilmsFromDatabase(data.Search);
             })
             .catch (error => {
                 console.log(`Произошла ошибка: ${error}`);
-                this.props.endLoadData();
+                this.props.endLoadData('Movies');
                 return null;
-            });
-        e.preventDefault();
+            });     
     }
 
     render() {
@@ -67,15 +66,21 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    addFilmsFromDatabase: (films) => dispatch ({
+    addFilmsFromDatabase: (movies) => dispatch ({
         type: addFromDatabase,
-        payload: films
+        payload: movies
     }),
-    startLoadData: () => dispatch ({
-        type: startLoad
+    startLoadData: (component) => dispatch ({
+        type: startLoad,
+        payload: {
+            component: component
+        }
     }),
-    endLoadData: () => dispatch ({
-        type: endLoad
+    endLoadData: (component) => dispatch ({
+        type: endLoad,
+        payload: {
+            component: component
+        }
     })
 });
 

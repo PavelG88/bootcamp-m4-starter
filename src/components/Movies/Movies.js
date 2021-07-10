@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MovieItem from '../MovieItem/MovieItem';
+import Preloader from '../Preloader/Preloader';
 import { connect } from 'react-redux';
 
 import './Movies.css';
@@ -24,13 +25,9 @@ class Movies extends Component {
     //     ]
     // }
     render() { 
-        if(this.props.isLoading) {
+        if(this.props.isLoading.includes('Movies')) {
             return (
-                <div className="preloader">
-                    <span className="preloader__text">L</span>
-                    <img className="preloader__img" src="./img/preloader.svg" alt="preloader" />
-                    <span className="preloader__text">ading</span>
-                </div>
+                <Preloader />
             );
         } else {
             return ( 
@@ -49,11 +46,9 @@ class Movies extends Component {
  
 const mapStateToProps = (state) => {
     return {
-        films: state.films,
+        films: state.movies,
         isLoading: state.isLoading
     }
 };
 
-const mapDispatchToProps = dispatch => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Movies);
+export default connect(mapStateToProps)(Movies);

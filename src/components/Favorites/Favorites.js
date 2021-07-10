@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { remove } from '../actions/actions';
+import { remove, addId } from '../actions/actions';
 import { Link } from 'react-router-dom';
+import { postMylistToDatabase } from '../fetch/fetchToAlgoritmika'
 
 import './Favorites.css';
-
 
 class Favorites extends Component {
     state = {
@@ -20,7 +20,29 @@ class Favorites extends Component {
     }
 
     saveList = (e) => {
-        this.setState({ isSaved: true });
+        const dataForSave = this.getDataForSave();
+        this.saveToDatabase(dataForSave);
+    }
+
+    getDataForSave = () => {
+        const moviesImdbId = this.props.movies.map((movie) => {
+            return movie.imdbID;
+        })
+        const data = {
+            "title": this.state.title,
+            "movies": moviesImdbId
+        };
+        return data;
+    }
+
+    saveToDatabase = (dataForSave) => {
+        postMylistToDatabase(dataForSave)
+            .then(response => response.json())
+            .then(data => {
+                this.props.addIdOfMylist(data['id']);
+                this.setState({ isSaved: true });
+            })
+            .catch(error => console.log("Ошибка сохранения: " + error));
     }
 
     render() { 
@@ -55,7 +77,7 @@ class Favorites extends Component {
                 :
                     <Link 
                         className="favorites__link" 
-                        to=""
+                        to={'/list/'+this.props.idOfMylistInBD}
                     >
                         Перейти к списку
                     </Link>
@@ -67,7 +89,8 @@ class Favorites extends Component {
  
 const mapStateToProps = (state) => {
     return {
-        movies: state.myList
+        movies: state.myList,
+        idOfMylistInBD: state.idOfMylistInBD
     }
 };
 
@@ -77,7 +100,13 @@ const mapDispatchToProps = dispatch => ({
         payload: { 
             imdbIDForRemoveFromMylist: id 
         }
-    })
+    }),
+    addIdOfMylist: (id) => dispatch({
+        type: addId,
+        payload: { 
+            idInDB: id 
+        }
+    }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
