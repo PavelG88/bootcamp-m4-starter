@@ -17,6 +17,31 @@
     margin-bottom: 24px;
 }
 
+.favorites__list-items {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.favorites__list-item-button {
+    border: 1px solid gray;
+    background-color: rgb(236, 236, 236);
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.favorites__list-item-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.favorites__list-item-button:hover:not(:disabled) {
+    background-color: gray;
+}
+
 .favorites__save {
     border: none;
     background-color: #496DDB;
@@ -26,8 +51,13 @@
     transition: all 0.2s linear;
 }
 
-.favorites__save:hover {
+.favorites__save:hover:not(:disabled) {
     cursor: pointer;
     opacity: 0.9;
     transition: all 0.2s linear;
+}
+
+.favorites__save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addFromDatabase, startLoad, endLoad } from '../actions/actions';
+
 import './SearchBox.css';
+
+const url = 'http://www.omdbapi.com/?';
+const apiKey = '6364c4d3';
 
 class SearchBox extends Component {
     state = {
@@ -9,8 +15,23 @@ class SearchBox extends Component {
         this.setState({ searchLine: e.target.value });
     }
     searchBoxSubmitHandler = (e) => {
+        this.props.startLoadData();
+        let data = new FormData(e.target);
+        let keyWords = data.get('desired-movie');
+        fetch(`${url}s=${keyWords}&apikey=${apiKey}`)
+            .then (response => response.json())
+            .then (data => {
+                this.props.endLoadData();
+                this.props.addFilmsFromDatabase(data.Search);
+            })
+            .catch (error => {
+                console.log(`Произошла ошибка: ${error}`);
+                this.props.endLoadData();
+                return null;
+            });
         e.preventDefault();
     }
+
     render() {
         const { searchLine } = this.state;
 
@@ -25,6 +46,7 @@ class SearchBox extends Component {
                             className="search-box__form-input"
                             placeholder="Например, Shawshank Redemption"
                             onChange={this.searchLineChangeHandler}
+                            name="desired-movie"
                         />
                     </label>
                     <button
@@ -39,5 +61,22 @@ class SearchBox extends Component {
         );
     }
 }
- 
-export default SearchBox;
+
+const mapStateToProps = (state) => {
+    return state;
+};
+
+const mapDispatchToProps = dispatch => ({
+    addFilmsFromDatabase: (films) => dispatch ({
+        type: addFromDatabase,
+        payload: films
+    }),
+    startLoadData: () => dispatch ({
+        type: startLoad
+    }),
+    endLoadData: () => dispatch ({
+        type: endLoad
+    })
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);
