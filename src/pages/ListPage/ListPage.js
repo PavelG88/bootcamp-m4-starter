@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { getMylistFromDatabase } from '../../components/fetch/fetchToAlgoritmika';
 import { getMoviesByIdFromIMDB } from '../../components/fetch/fetchToIMDB';
-import Preloader from '../../components/Preloader/Preloader';
+import PreloaderListItem from '../../components/Preloaders/PreloaderListItem/PreloaderListItem';
+import PreloaderList from '../../components/Preloaders/PreloaderList/PreloaderList';
 
 import { connect } from 'react-redux';
 import { startLoad, endLoad } from '../../components/actions/actions';
@@ -20,76 +21,61 @@ class ListPage extends Component {
         // Запросы к серверу алгоритмики
         let listImdbID = [];
         getMylistFromDatabase(id)
-            .then(response => response.json())
             .then(data => {
                 listImdbID = data["movies"];
-                console.log(listImdbID)
+                // console.log(listImdbID)
                 // Запросы к серверу по всем imdbID
                 this.getMoviesFromIMDB(listImdbID);
+                this.props.endLoadData('ListPage');
             })
-            .catch(error => console.log("Ошибка сохранения: " + error));   
+            .catch(error => {
+                console.log("Ошибка сохранения: " + error);
+                this.props.endLoadData('ListPage');
+            });   
     }
 
     getMoviesFromIMDB  = (listImdbID) => {
-        let listMovies = [];
-
-        // getMoviesByIdFromIMDB(listImdbID[0])
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             listMovies.push(data);
-        //             console.log(listMovies);
-        //             this.props.endLoadData('ListPage');   
-        //             this.setState({ movies: listMovies });
-        //         })
-        //         .catch(error => {
-        //             console.log("Ошибка сохранения: " + error)
-        //             this.props.endLoadData('ListPage');
-        //         });
-
-        listImdbID.forEach( imdbId => {
+        listImdbID.forEach( (imdbId) => {
+            this.props.startLoadData(imdbId);
             getMoviesByIdFromIMDB(imdbId)
-                .then(response => response.json())
                 .then(data => {
+                    let listMovies = [...this.state.movies];
                     listMovies.push(data);
+                    this.setState({ movies: listMovies });
+                    this.props.endLoadData(imdbId);
                 })
                 .catch(error => {
                     console.log("Ошибка сохранения: " + error)
-                    this.props.endLoadData('ListPage');
+                    this.props.endLoadData(imdbId);
                 });
         });
-        console.log(listMovies);
-        this.props.endLoadData('ListPage');   
-        this.setState({ movies: listMovies });
     }
 
     render() {
         if(this.props.isLoading.includes('ListPage')) {
-            console.log('Preloader');
             return (
                 <div className="list-page">
                     <h1 className="list-page__title">Мой список</h1>
-                    <Preloader />
+                    <PreloaderList />
                 </div>
             );
-        } else { 
-            console.log('List');
-            console.log(this.state.movies);
-            {this.state.movies.map((item) => {
-                console.log(item);
-                console.log(item.Title);
-                console.log(item.Year);
-                });
-            }
+        } else {
             return (
                 <div className="list-page">
                     <h1 className="list-page__title">Мой список</h1>
                     <ul>
                         {this.state.movies.map((item) => {
-                            return (
-                                <li key={item.imdbID}>
-                                    <a href={"https://www.imdb.com/title/"+item.imdbID} target="_blank">{item.Title} ({item.Year})</a>
-                                </li>
-                            );
+                            if(this.props.isLoading.includes(item.imdbID)) {
+                                return (
+                                    <PreloaderListItem />
+                                );
+                            } else {
+                                return (
+                                    <li key={item.imdbID}>
+                                        <a href={"https://www.imdb.com/title/"+item.imdbID} target="_blank">{item.Title} ({item.Year})</a>
+                                    </li>
+                                );
+                            }
                         })}
                     </ul>
                 </div>

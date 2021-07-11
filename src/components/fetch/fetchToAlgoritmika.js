@@ -5,13 +5,16 @@ export const postMylistToDatabase = async(dataForSave) => {
         throw 'Незаполнены параметры запроса';
     }
 
-    return await fetch(url, {
+    let idOfMylist = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify(dataForSave)    
     });
+    idOfMylist = await idOfMylist.json();
+    
+    return idOfMylist;
 }
 
 export const getMylistFromDatabase = async(id) => {
@@ -19,5 +22,8 @@ export const getMylistFromDatabase = async(id) => {
         throw 'Незаполнены параметры запроса';
     }
 
-    return await fetch(`${url}/${id}`);
+    let imdbIdes = await fetch(`${url}/${id}`);
+    imdbIdes = await imdbIdes.json();
+
+    return imdbIdes;
 } 

@@ -37,7 +37,6 @@ class Favorites extends Component {
 
     saveToDatabase = (dataForSave) => {
         postMylistToDatabase(dataForSave)
-            .then(response => response.json())
             .then(data => {
                 this.props.addIdOfMylist(data['id']);
                 this.setState({ isSaved: true });

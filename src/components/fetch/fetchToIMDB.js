@@ -5,8 +5,9 @@ export const getMoviesByNameFromIMDB = async(keyWords) => {
     if(!url || !apiKey || !keyWords) {
         throw 'Незаполнены параметры запроса';
     }
-
-    return await fetch(`${url}s=${keyWords}&apikey=${apiKey}`);
+    let movies = await fetch(`${url}s=${keyWords}&apikey=${apiKey}`);
+    movies = await movies.json();
+    return movies;
 }
 
 export const getMoviesByIdFromIMDB = async(id) => {
@@ -14,5 +15,7 @@ export const getMoviesByIdFromIMDB = async(id) => {
         throw 'Незаполнены параметры запроса';
     }
 
-    return await fetch(`${url}i=${id}&apikey=${apiKey}`);
+    let movies = await fetch(`${url}i=${id}&apikey=${apiKey}`);
+    movies = await movies.json();
+    return movies;
 }

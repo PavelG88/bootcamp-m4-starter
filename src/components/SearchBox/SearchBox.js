@@ -19,7 +19,6 @@ class SearchBox extends Component {
         e.preventDefault();
 
         getMoviesByNameFromIMDB(keyWords)
-            .then (response => response.json())
             .then (data => {
                 this.props.endLoadData('Movies');
                 this.props.addFilmsFromDatabase(data.Search);

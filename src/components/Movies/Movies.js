@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MovieItem from '../MovieItem/MovieItem';
-import Preloader from '../Preloader/Preloader';
+import PreloaderMovies from '../Preloaders/PreloaderMovies/PreloaderMovies';
 import { connect } from 'react-redux';
 
 import './Movies.css';
@@ -27,7 +27,7 @@ class Movies extends Component {
     render() { 
         if(this.props.isLoading.includes('Movies')) {
             return (
-                <Preloader />
+                <PreloaderMovies />
             );
         } else {
             return ( 
