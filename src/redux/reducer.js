@@ -35,7 +35,7 @@ function reducer(state = initialState, action) {
 
     } else if (action.type === startLoad) { //Начало загрузки данных с сервера, изменение статуса загрузки на true
         let updatedState = {...state};
-        updatedState.isLoading.push(action.payload.component);
+        updatedState.isLoading = [ ...state.isLoading, action.payload.component];
         return updatedState;
 
     } else if (action.type === endLoad) {   //Окончание загрузки данных с сервера, изменение статуса загрузки на false

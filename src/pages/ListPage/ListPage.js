@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { getMylistFromDatabase } from '../../components/fetch/fetchToAlgoritmika';
 import { getMoviesByIdFromIMDB } from '../../components/fetch/fetchToIMDB';
-import PreloaderListItem from '../../components/Preloaders/PreloaderListItem/PreloaderListItem';
-import PreloaderList from '../../components/Preloaders/PreloaderList/PreloaderList';
+import Preloader from '../../components/Preloader/Preloader';
 
 import { connect } from 'react-redux';
 import { startLoad, endLoad } from '../../components/actions/actions';
@@ -56,7 +55,7 @@ class ListPage extends Component {
             return (
                 <div className="list-page">
                     <h1 className="list-page__title">Мой список</h1>
-                    <PreloaderList />
+                    <Preloader />
                 </div>
             );
         } else {
@@ -67,7 +66,7 @@ class ListPage extends Component {
                         {this.state.movies.map((item) => {
                             if(this.props.isLoading.includes(item.imdbID)) {
                                 return (
-                                    <PreloaderListItem />
+                                    <Preloader key={item.imdbID}/>
                                 );
                             } else {
                                 return (

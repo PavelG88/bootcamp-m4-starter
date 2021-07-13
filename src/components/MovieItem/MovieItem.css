@@ -29,3 +29,15 @@
     opacity: 0.9;
     transition: all 0.2s linear;
 }
+
+.movie-item__more-button {
+    display: block;
+    cursor: pointer;
+    border: none;
+    background-color: #FFEEDB;
+    color: #496DDB;
+    font-size: 14px;
+    transition: all 0.2s linear;
+    margin: 10px 0;
+}
+

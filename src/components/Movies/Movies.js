@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MovieItem from '../MovieItem/MovieItem';
-import PreloaderMovies from '../Preloaders/PreloaderMovies/PreloaderMovies';
+import Preloader from '../Preloader/Preloader';
 import { connect } from 'react-redux';
 
 import './Movies.css';
@@ -27,12 +27,12 @@ class Movies extends Component {
     render() { 
         if(this.props.isLoading.includes('Movies')) {
             return (
-                <PreloaderMovies />
+                <Preloader />
             );
-        } else {
+        } else if (this.props.movies) {
             return ( 
                 <ul className="movies">
-                    {this.props.films.map((movie) => (
+                    {this.props.movies.map((movie) => (
                         <li className="movies__item" key={movie.imdbID}>
                             {/* <p>{movie.imdbID}</p> */}
                             <MovieItem {...movie} />
@@ -40,13 +40,17 @@ class Movies extends Component {
                     ))}
                 </ul>
             );
+        } else {
+            return ( 
+                <div className="movies">Ничего нет :(((( Попробуйте другое название фильма.</div>
+            )
         }
     }
 }
  
 const mapStateToProps = (state) => {
     return {
-        films: state.movies,
+        movies: state.movies,
         isLoading: state.isLoading
     }
 };

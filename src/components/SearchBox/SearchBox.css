@@ -39,3 +39,8 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.search-box__error-input {
+    color: red;
+    font-size: 12px;
+}

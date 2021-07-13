@@ -7,27 +7,48 @@ import './SearchBox.css';
 
 class SearchBox extends Component {
     state = {
-        searchLine: ''
+        searchLine: '',
+        isLatincaOrNum: true
     }
     searchLineChangeHandler = (e) => {
-        this.setState({ searchLine: e.target.value });
+        let reg=new RegExp('^[a-zA-Z0-9]+$');
+        if (!e.target.value) {
+            this.setState({ 
+                searchLine: '',
+                isLatincaOrNum: true
+            });
+            return;
+        }
+
+        if (reg.test(e.target.value)) {
+            this.setState({ 
+                searchLine: e.target.value,
+                isLatincaOrNum: true
+            });
+        } else {
+            this.setState({ 
+                isLatincaOrNum: false
+            });
+        }
+        
     }
     searchBoxSubmitHandler = (e) => {
         this.props.startLoadData('Movies');
-        let data = new FormData(e.target);
-        let keyWords = data.get('desired-movie');
+        // let data = new FormData(e.target);
+        // let keyWords = data.get('desired-movie');
         e.preventDefault();
 
-        getMoviesByNameFromIMDB(keyWords)
-            .then (data => {
-                this.props.endLoadData('Movies');
-                this.props.addFilmsFromDatabase(data.Search);
-            })
-            .catch (error => {
-                console.log(`Произошла ошибка: ${error}`);
-                this.props.endLoadData('Movies');
-                return null;
-            });     
+        getMoviesByNameFromIMDB(this.state.searchLine)
+        .then (data => {
+            this.props.endLoadData('Movies');
+            this.props.addFilmsFromDatabase(data.Search);
+            // console.log(data.Search);
+        })
+        .catch (error => {
+            console.log(`Произошла ошибка: ${error}`);
+            this.props.endLoadData('Movies');
+            return null;
+        });    
     }
 
     render() {
@@ -55,6 +76,11 @@ class SearchBox extends Component {
                         Искать
                     </button>
                 </form>
+                {this.state.isLatincaOrNum ? 
+                    <></> 
+                :
+                    <span className="search-box__error-input">* латинские буквы или цифры</span>
+                }
             </div>
         );
     }
