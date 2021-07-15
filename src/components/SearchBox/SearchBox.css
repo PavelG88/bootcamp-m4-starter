@@ -1,5 +1,6 @@
 .search-box__form {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .search-box__form-label {
@@ -43,4 +44,10 @@
 .search-box__error-input {
     color: red;
     font-size: 12px;
+    position: absolute;
+    bottom: -15px;
+}
+
+.search-box {
+    position: relative;
 }

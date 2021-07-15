@@ -1,13 +1,13 @@
 .main-page__content {
-    padding: 42px calc(50% - 500px);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    padding: 40px;
 }
 
 .main-page__main-section {
-    padding-left: 40px;
+    padding: 10px;
     box-sizing: border-box;
-    width: 60%;
+    min-width: 500px;
 }
 
 .main-page__search-box {
@@ -15,5 +15,26 @@
 }
 
 .main-page__favorites {
-    width: 35%;   
+    min-width: 400px;
+    padding: 10px; 
+    box-sizing: border-box;  
+}
+
+@media (max-width: 900px) {
+    .main-page__content {
+        flex-wrap: wrap;
+        padding: 20px;
+        margin: 0;
+    }
+
+    .main-page__main-section,
+    .main-page__favorites {
+        min-width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .main-page__main-section {
+        order: 2;
+        margin-bottom: 5px;
+    }
 }

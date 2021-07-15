@@ -49,6 +49,29 @@
     color: #FFEEDB;
     font-size: 14px;
     transition: all 0.2s linear;
+    margin-bottom: 5px;
+    min-width: 200px;
+    box-sizing: border-box;
+    display: block;
+}
+
+
+.favorites__new-list,
+.favorites__link {
+    border: none;
+    background-color: #496DDB;
+    padding: 10px 15px;
+    color: #FFEEDB;
+    font-size: 14px;
+    transition: all 0.2s linear;
+    margin-bottom: 5px;
+    display: block;
+    max-width: 200px;
+    box-sizing: border-box;
+}
+
+.favorites__link{
+    text-decoration: none;
 }
 
 .favorites__save:hover:not(:disabled) {
@@ -60,4 +83,30 @@
 .favorites__save:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.favorites__new-list:hover,
+.favorites__link:hover {
+    cursor: pointer;
+    opacity: 0.9;
+    transition: all 0.2s linear;
+}
+
+@media (max-width: 900px) {
+    .favorites__name {
+        font-size: 14px;
+    }
+
+    .favorites__new-list,
+    .favorites__link,
+    .favorites__save {
+        font-size: 12px;
+        padding: 10px;
+        margin: 0 auto;
+        margin-bottom: 5px;
+    }
+
+    .favorites {
+        padding: 10px;
+    }
 }

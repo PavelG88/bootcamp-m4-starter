@@ -35,51 +35,40 @@ class ListPage extends Component {
 
     getMoviesFromIMDB  = (listImdbID) => {
         listImdbID.forEach( (imdbId) => {
-            this.props.startLoadData(imdbId);
             getMoviesByIdFromIMDB(imdbId)
                 .then(data => {
                     let listMovies = [...this.state.movies];
                     listMovies.push(data);
                     this.setState({ movies: listMovies });
-                    this.props.endLoadData(imdbId);
                 })
                 .catch(error => {
-                    console.log("Ошибка сохранения: " + error)
-                    this.props.endLoadData(imdbId);
+                    console.log("Ошибка сохранения: " + error);
                 });
         });
     }
 
     render() {
-        if(this.props.isLoading.includes('ListPage')) {
-            return (
-                <div className="list-page">
-                    <h1 className="list-page__title">Мой список</h1>
-                    <Preloader />
-                </div>
-            );
-        } else {
-            return (
-                <div className="list-page">
-                    <h1 className="list-page__title">Мой список</h1>
-                    <ul>
-                        {this.state.movies.map((item) => {
-                            if(this.props.isLoading.includes(item.imdbID)) {
-                                return (
-                                    <Preloader key={item.imdbID}/>
-                                );
-                            } else {
-                                return (
-                                    <li key={item.imdbID}>
-                                        <a href={"https://www.imdb.com/title/"+item.imdbID} target="_blank">{item.Title} ({item.Year})</a>
-                                    </li>
-                                );
-                            }
-                        })}
-                    </ul>
-                </div>
-            );
-        }
+        return (
+            <div className="list-page">
+                <h1 className="list-page__title">Мой список</h1>
+                <ul>
+                    {this.state.movies.map((item) => {
+                        if(this.props.isLoading.includes(item.imdbID)) {
+                            return (
+                                <Preloader key={item.imdbID}/>
+                            );
+                        } else {
+                            return (
+                                <li key={item.imdbID}>
+                                    <a href={"https://www.imdb.com/title/"+item.imdbID} target="_blank">{item.Title} ({item.Year})</a>
+                                </li>
+                            );
+                        }
+                    })}
+                </ul>
+            </div>
+        );
+        
     }
 }
  

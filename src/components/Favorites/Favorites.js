@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { remove, addId } from '../actions/actions';
+import { remove, addId, clearMylist } from '../actions/actions';
 import { Link } from 'react-router-dom';
 import { postMylistToDatabase } from '../fetch/fetchToAlgoritmika'
 
@@ -44,6 +44,14 @@ class Favorites extends Component {
             .catch(error => console.log("Ошибка сохранения: " + error));
     }
 
+    clearMylist = () => {
+        this.setState({
+            title: '',
+            isSaved: false
+        });
+        this.props.clearMylist();
+    }
+
     render() { 
         return (
             <div className="favorites">
@@ -65,21 +73,38 @@ class Favorites extends Component {
                     })}
                 </ul>
                 { !this.state.isSaved ?
-                    <button 
-                        type="button" 
-                        className="favorites__save" 
-                        disabled={!this.state.title || this.props.movies.length === 0}
-                        onClick={this.saveList}
-                    >
-                        Сохранить список
-                    </button>
+                    <>    
+                        <button 
+                            type="button" 
+                            className="favorites__save" 
+                            disabled={!this.state.title || this.props.movies.length === 0}
+                            onClick={this.saveList}
+                        >
+                            Сохранить список
+                        </button>
+                        <button 
+                            className="favorites__save" 
+                            disabled={this.props.movies.length === 0}
+                            onClick={this.clearMylist}
+                        >
+                            Очистить список
+                        </button>
+                    </>
                 :
-                    <Link 
-                        className="favorites__link" 
-                        to={'/list/'+this.props.idOfMylistInBD}
-                    >
-                        Перейти к списку
-                    </Link>
+                    <>
+                        <Link 
+                            className="favorites__link" 
+                            to={'/list/'+this.props.idOfMylistInBD}
+                        >
+                            Перейти к списку
+                        </Link>
+                        <div 
+                            className="favorites__new-list" 
+                            onClick={this.clearMylist}
+                        >
+                            Создать новый список
+                        </div>
+                    </>
                 }   
             </div>
         );
@@ -106,6 +131,9 @@ const mapDispatchToProps = dispatch => ({
             idInDB: id 
         }
     }),
+    clearMylist: () => dispatch({
+        type: clearMylist
+    })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Favorites);

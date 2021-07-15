@@ -30,6 +30,11 @@
     transition: all 0.2s linear;
 }
 
+.movie-item__add-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .movie-item__more-button {
     display: block;
     cursor: pointer;

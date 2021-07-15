@@ -32,7 +32,7 @@ class MovieItem extends Component {
                     :
                         <button type="button" className="movie-item__more-button" onClick={this.showMoreDetails}>Подробнее...</button>
                     }
-                    <button type="button" className="movie-item__add-button" onClick={() => this.props.addToMylist(imdbID)}>Добавить в список</button>
+                    <button type="button" className="movie-item__add-button" onClick={() => this.props.addToMylist(imdbID)} disabled={this.props.idOfMylistInBD}>Добавить в список</button>
                 </div>
             </article>
         );
@@ -41,7 +41,8 @@ class MovieItem extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        movies: state.movies
+        movies: state.movies,
+        idOfMylistInBD: state.idOfMylistInBD
     }
 };
 

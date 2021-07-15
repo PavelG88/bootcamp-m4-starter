@@ -1,4 +1,4 @@
-import { addFromDatabase, add, remove, startLoad, endLoad, addId } from '../components/actions/actions';
+import { addFromDatabase, add, remove, startLoad, endLoad, addId, clearMylist } from '../components/actions/actions';
 
 let initialState = {
     myList: [],
@@ -31,6 +31,12 @@ function reducer(state = initialState, action) {
         const updatedMyList = state.myList.filter( item => item.imdbID !== action.payload.imdbIDForRemoveFromMylist);
         let updatedState = {...state};
         updatedState.myList = updatedMyList;
+        return updatedState;
+
+    } else if (action.type === clearMylist) {    //Очистить список избранных фильмов
+        let updatedState = {...state};
+        updatedState.myList = [];
+        updatedState.idOfMylistInBD ='';
         return updatedState;
 
     } else if (action.type === startLoad) { //Начало загрузки данных с сервера, изменение статуса загрузки на true

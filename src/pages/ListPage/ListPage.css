@@ -1,5 +1,6 @@
 .list-page {
-    padding: 42px calc(50% - 300px);
+    padding: 40px;
+    text-align: center;
 }
 
 .list-page__title {
@@ -10,4 +11,10 @@
 .list-page ul li {
     font-size: 18px;
     margin-bottom: 10px;
+}
+
+@media (max-width: 900px) {
+    .list-page {
+        padding: 20px;
+    }
 }

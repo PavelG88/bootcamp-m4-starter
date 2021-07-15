@@ -11,7 +11,7 @@ class SearchBox extends Component {
         isLatincaOrNum: true
     }
     searchLineChangeHandler = (e) => {
-        let reg=new RegExp('^[a-zA-Z0-9]+$');
+        let reg = new RegExp('^[a-zA-Z0-9]+$');
         if (!e.target.value) {
             this.setState({ 
                 searchLine: '',
@@ -77,7 +77,7 @@ class SearchBox extends Component {
                     </button>
                 </form>
                 {this.state.isLatincaOrNum ? 
-                    <></> 
+                    <span className="search-box__error-input"></span>
                 :
                     <span className="search-box__error-input">* латинские буквы или цифры</span>
                 }
