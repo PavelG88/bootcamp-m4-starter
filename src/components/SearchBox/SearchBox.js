@@ -67,7 +67,12 @@ class SearchBox extends Component {
                             onChange={this.searchLineChangeHandler}
                             name="desired-movie"
                         />
-                    </label>
+                        {this.state.isLatincaOrNum ? 
+                            <span className="search-box__error-input"></span>
+                        :
+                            <span className="search-box__error-input">* латинские буквы или цифры</span>
+                        }
+                    </label>                        
                     <button
                         type="submit"
                         className="search-box__form-submit"
@@ -76,11 +81,7 @@ class SearchBox extends Component {
                         Искать
                     </button>
                 </form>
-                {this.state.isLatincaOrNum ? 
-                    <span className="search-box__error-input"></span>
-                :
-                    <span className="search-box__error-input">* латинские буквы или цифры</span>
-                }
+                
             </div>
         );
     }

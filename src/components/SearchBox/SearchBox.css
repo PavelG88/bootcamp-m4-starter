@@ -1,12 +1,14 @@
 .search-box__form {
     display: flex;
     flex-wrap: wrap;
+    
 }
 
 .search-box__form-label {
     display: inline-block;
     font-size: 12px;
     margin-right: 10px;
+    position: relative;
 }
 
 .search-box__form-input {
@@ -46,8 +48,4 @@
     font-size: 12px;
     position: absolute;
     bottom: -15px;
-}
-
-.search-box {
-    position: relative;
 }

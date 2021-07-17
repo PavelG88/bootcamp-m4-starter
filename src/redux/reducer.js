@@ -1,9 +1,10 @@
-import { addFromDatabase, add, remove, startLoad, endLoad, addId, clearMylist } from '../components/actions/actions';
+import { addFromDatabase, add, remove, startLoad, endLoad, addInfoMylist, clearMylist } from '../components/actions/actions';
 
 let initialState = {
     myList: [],
     movies: [],
     isLoading: [],
+    title: '',
     idOfMylistInBD: ''
 }
 
@@ -36,7 +37,8 @@ function reducer(state = initialState, action) {
     } else if (action.type === clearMylist) {    //Очистить список избранных фильмов
         let updatedState = {...state};
         updatedState.myList = [];
-        updatedState.idOfMylistInBD ='';
+        updatedState.idOfMylistInBD = '';
+        updatedState.title = '';
         return updatedState;
 
     } else if (action.type === startLoad) { //Начало загрузки данных с сервера, изменение статуса загрузки на true
@@ -50,9 +52,10 @@ function reducer(state = initialState, action) {
         updatedState.isLoading = updatedIsLoading;
         return updatedState;
 
-    } else if (action.type === addId) {   //Добавление id сохраненного в БД списка избранных фильмов
+    } else if (action.type === addInfoMylist) {   //Добавление id сохраненного в БД списка избранных фильмов
         let updatedState = {...state};
         updatedState.idOfMylistInBD = action.payload.idInDB;
+        updatedState.title = action.payload.titleMylist;
         return updatedState;
     }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { remove, addId, clearMylist } from '../actions/actions';
+import { remove, addInfoMylist, clearMylist } from '../actions/actions';
 import { Link } from 'react-router-dom';
 import { postMylistToDatabase } from '../fetch/fetchToAlgoritmika'
 
@@ -8,8 +8,7 @@ import './Favorites.css';
 
 class Favorites extends Component {
     state = {
-        title: '',
-        isSaved: false
+        title: this.props.title
         // movies: [
         //     { imdbID: 'tt0068646', title: 'The Godfather', year: 1972 }
         // ]
@@ -38,18 +37,16 @@ class Favorites extends Component {
     saveToDatabase = (dataForSave) => {
         postMylistToDatabase(dataForSave)
             .then(data => {
-                this.props.addIdOfMylist(data['id']);
-                this.setState({ isSaved: true });
+                this.props.addInfoOfMylist(data['id'], this.state.title);
             })
             .catch(error => console.log("Ошибка сохранения: " + error));
     }
 
     clearMylist = () => {
-        this.setState({
-            title: '',
-            isSaved: false
-        });
         this.props.clearMylist();
+        this.setState({
+            title: ''
+        });
     }
 
     render() { 
@@ -60,19 +57,19 @@ class Favorites extends Component {
                     className="favorites__name" 
                     placeholder="Введите название списка" 
                     onChange={this.inputTitleChange} 
-                    disabled={this.state.isSaved} 
+                    disabled={this.props.idOfMylistInBD} 
                 />
                 <ul className="favorites__list">
                     {this.props.movies.map((item) => {
                         return (
                             <li key={item.imdbID} className="favorites__list-items">
                                 <div className="favorites__list-item-data">{item.Title} ({item.Year})</div> 
-                                <button className="favorites__list-item-button" onClick={() => this.props.removeFromMylist(item.imdbID)} disabled={this.state.isSaved}>X</button>
+                                <button className="favorites__list-item-button" onClick={() => this.props.removeFromMylist(item.imdbID)} disabled={this.props.idOfMylistInBD}>X</button>
                             </li>
                         );
                     })}
                 </ul>
-                { !this.state.isSaved ?
+                { !this.props.idOfMylistInBD ?
                     <>    
                         <button 
                             type="button" 
@@ -114,6 +111,7 @@ class Favorites extends Component {
 const mapStateToProps = (state) => {
     return {
         movies: state.myList,
+        title: state.title,
         idOfMylistInBD: state.idOfMylistInBD
     }
 };
@@ -125,10 +123,11 @@ const mapDispatchToProps = dispatch => ({
             imdbIDForRemoveFromMylist: id 
         }
     }),
-    addIdOfMylist: (id) => dispatch({
-        type: addId,
+    addInfoOfMylist: (id, title) => dispatch({
+        type: addInfoMylist,
         payload: { 
-            idInDB: id 
+            idInDB: id,
+            titleMylist: title 
         }
     }),
     clearMylist: () => dispatch({

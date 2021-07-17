@@ -4,4 +4,4 @@ export const remove = 'REMOVE_FILM_FROM_MYLIST';
 export const clearMylist = 'CLEAR_MYLIST';
 export const startLoad = 'START_LOAD_DATA_FROM_DATABASE';
 export const endLoad = 'END_LOAD_DATA_FROM_DATABASE';
-export const addId = 'ADD_ID_OF_MYLIST_IN_DATABASE';
+export const addInfoMylist = 'ADD_INFO_OF_MYLIST_IN_DATABASE';
