@@ -25,12 +25,12 @@ class ListPage extends Component {
                 // console.log(listImdbID)
                 // Запросы к серверу по всем imdbID
                 this.getMoviesFromIMDB(listImdbID);
-                this.props.endLoadData('ListPage');
+                
             })
             .catch(error => {
                 console.log("Ошибка сохранения: " + error);
                 this.props.endLoadData('ListPage');
-            });   
+            }); 
     }
 
     getMoviesFromIMDB  = (listImdbID) => {
@@ -40,9 +40,11 @@ class ListPage extends Component {
                     let listMovies = [...this.state.movies];
                     listMovies.push(data);
                     this.setState({ movies: listMovies });
+                    this.props.endLoadData('ListPage');
                 })
                 .catch(error => {
                     console.log("Ошибка сохранения: " + error);
+                    this.props.endLoadData('ListPage');
                 });
         });
     }
@@ -51,21 +53,19 @@ class ListPage extends Component {
         return (
             <div className="list-page">
                 <h1 className="list-page__title">Мой список</h1>
+                { this.props.isLoading.includes('ListPage') ?
+                    <Preloader />
+                :
                 <ul>
                     {this.state.movies.map((item) => {
-                        if(this.props.isLoading.includes(item.imdbID)) {
-                            return (
-                                <Preloader key={item.imdbID}/>
-                            );
-                        } else {
-                            return (
-                                <li key={item.imdbID}>
-                                    <a href={"https://www.imdb.com/title/"+item.imdbID} target="_blank">{item.Title} ({item.Year})</a>
-                                </li>
-                            );
-                        }
+                        return (
+                            <li key={item.imdbID}>
+                                <a href={"https://www.imdb.com/title/"+item.imdbID} target="_blank">{item.Title} ({item.Year})</a>
+                            </li>
+                        );
                     })}
                 </ul>
+                }
             </div>
         );
         

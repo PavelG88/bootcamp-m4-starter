@@ -23,7 +23,7 @@ class MovieItem extends Component {
             <article className="movie-item">
                 <img className="movie-item__poster" src={Poster} alt={Title} />
                 <div className="movie-item__info">
-                    <h3 className="movie-item__title">{Title}&nbsp;({Year})</h3>
+                    <h3 className="movie-item__title">{Title} ({Year})</h3>
                     {this.state.isMoreDetails ?
                         <>
                             <div className="movie-item__more-details">Здесь могла быть более подробная информация о фильме {Title} или Ваша реклама</div>

@@ -8,14 +8,16 @@ import './SearchBox.css';
 class SearchBox extends Component {
     state = {
         searchLine: '',
-        isLatincaOrNum: true
+        errors: {
+            isLatincaOrNum: true
+        }
     }
     searchLineChangeHandler = (e) => {
         let reg = new RegExp('^[a-zA-Z0-9]+$');
         if (!e.target.value) {
             this.setState({ 
                 searchLine: '',
-                isLatincaOrNum: true
+                errors: {isLatincaOrNum: true}
             });
             return;
         }
@@ -23,11 +25,11 @@ class SearchBox extends Component {
         if (reg.test(e.target.value)) {
             this.setState({ 
                 searchLine: e.target.value,
-                isLatincaOrNum: true
+                errors: { isLatincaOrNum: true }
             });
         } else {
             this.setState({ 
-                isLatincaOrNum: false
+                errors: { isLatincaOrNum: false }
             });
         }
         
@@ -67,7 +69,7 @@ class SearchBox extends Component {
                             onChange={this.searchLineChangeHandler}
                             name="desired-movie"
                         />
-                        {this.state.isLatincaOrNum ? 
+                        {this.state.errors.isLatincaOrNum ? 
                             <span className="search-box__error-input"></span>
                         :
                             <span className="search-box__error-input">* латинские буквы или цифры</span>

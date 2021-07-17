@@ -15,7 +15,7 @@
     box-sizing: border-box;
     display: block;
     margin-top: 5px;
-    width: 300px;
+    min-width: 260px;
     font-size: 14px;
     padding: 5px 10px;
     border: 1px solid rgba(0, 8, 7, .5);
@@ -48,4 +48,10 @@
     font-size: 12px;
     position: absolute;
     bottom: -15px;
+}
+
+@media (max-width: 500px) {
+    .search-box__form-input {
+        font-size: 12px;
+    }
 }
