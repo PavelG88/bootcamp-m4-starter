@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { add } from '../actions/actions';
-
+import { add, showMoreDetailsMovie, startLoad, endLoad } from '../actions/actions';
+import { getMoviesByIdFromIMDB } from '../fetch/fetchToIMDB';
 import './MovieItem.css';
 
 class MovieItem extends Component {
     
-    state = {
-        isMoreDetails: false
-    }
-    
-    showMoreDetails = (e) => {
-        this.setState({ isMoreDetails: this.state.isMoreDetails ? false : true });
-        console.log(this.props.movies);
+    showDetails = (e) => {
+        this.props.startLoadData('MoreDetails');
+        getMoviesByIdFromIMDB(this.props.imdbID)
+            .then(data => {
+                // console.log(data);
+                this.props.showMoreDetails(data, 'MoreDetails');
+                this.props.endLoadData('MoreDetails');
+            })
+            .catch(error => {
+                console.log("Ошибка получения данных: " + error);
+                this.props.showMoreDetails({Title: "Что-то пошло не так, попробуйте позже."});
+                this.props.endLoadData('MoreDetails');
+            });
     }
 
     render() {
@@ -24,14 +30,7 @@ class MovieItem extends Component {
                 <img className="movie-item__poster" src={Poster} alt={Title} />
                 <div className="movie-item__info">
                     <h3 className="movie-item__title">{Title} ({Year})</h3>
-                    {this.state.isMoreDetails ?
-                        <>
-                            <div className="movie-item__more-details">Здесь могла быть более подробная информация о фильме {Title} или Ваша реклама</div>
-                            <button type="button" className="movie-item__more-button" onClick={this.showMoreDetails}>Скрыть</button>
-                        </>
-                    :
-                        <button type="button" className="movie-item__more-button" onClick={this.showMoreDetails}>Подробнее...</button>
-                    }
+                    <button type="button" className="movie-item__more-button" onClick={this.showDetails}>Подробнее...</button>
                     <button type="button" className="movie-item__add-button" onClick={() => this.props.addToMylist(imdbID)} disabled={this.props.idOfMylistInBD}>Добавить в список</button>
                 </div>
             </article>
@@ -51,6 +50,25 @@ const mapDispatchToProps = dispatch => ({
         type: add,
         payload: { 
             imdbIDToAddToMylist: id 
+        }
+    }),
+    showMoreDetails: (data, component) => dispatch({
+        type: showMoreDetailsMovie,
+        payload: { 
+            dataAboutMovie: data,
+            component: component
+        }
+    }),
+    startLoadData: (component) => dispatch ({
+        type: startLoad,
+        payload: {
+            component: component
+        }
+    }),
+    endLoadData: (component) => dispatch ({
+        type: endLoad,
+        payload: {
+            component: component
         }
     })
 });

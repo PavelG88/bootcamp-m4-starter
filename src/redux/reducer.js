@@ -1,11 +1,13 @@
-import { addFromDatabase, add, remove, startLoad, endLoad, addInfoMylist, clearMylist } from '../components/actions/actions';
+import { addFromDatabase, add, remove, startLoad, endLoad, addInfoMylist, clearMylist, showMoreDetailsMovie, hideComponent } from '../components/actions/actions';
 
 let initialState = {
     myList: [],
     movies: [],
     isLoading: [],
     title: '',
-    idOfMylistInBD: ''
+    idOfMylistInBD: '',
+    movieMoreDetails: {},
+    componentsIsShowing: []
 }
 
 /**
@@ -56,6 +58,18 @@ function reducer(state = initialState, action) {
         let updatedState = {...state};
         updatedState.idOfMylistInBD = action.payload.idInDB;
         updatedState.title = action.payload.titleMylist;
+        return updatedState;
+
+    } else if (action.type === showMoreDetailsMovie) {   //Добавить подробную информацию об одном из фильмов и показать на экране
+        let updatedState = {...state};
+        updatedState.componentsIsShowing = [ ...state.componentsIsShowing, action.payload.component];
+        updatedState.movieMoreDetails  = action.payload.dataAboutMovie;
+        return updatedState;
+
+    } else if (action.type === hideComponent) {   //Скрыть показ компонента
+        const updatedСomponentsIsShowing = state.componentsIsShowing.filter(item => item !== action.payload.component);
+        let updatedState = {...state};
+        updatedState.componentsIsShowing = updatedСomponentsIsShowing;
         return updatedState;
     }
 

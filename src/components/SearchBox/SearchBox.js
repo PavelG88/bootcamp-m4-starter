@@ -13,7 +13,7 @@ class SearchBox extends Component {
         }
     }
     searchLineChangeHandler = (e) => {
-        let reg = new RegExp('^[a-zA-Z0-9]+$');
+        let reg = new RegExp('^[a-zA-Z0-9 ]+$');
         if (!e.target.value) {
             this.setState({ 
                 searchLine: '',

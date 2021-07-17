@@ -4,6 +4,7 @@ import Header from '../../components/Header/Header';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import Movies from '../../components/Movies/Movies';
 import Favorites from '../../components/Favorites/Favorites';
+import MoreDetails from '../../components/MoreDetails/MoreDetails';
 
 class MainPage extends Component {
     render() { 
@@ -23,6 +24,7 @@ class MainPage extends Component {
                         <Favorites />
                     </aside>
                 </main>
+                <MoreDetails />
             </div>
         );
     }
